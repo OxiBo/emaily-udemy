@@ -5,7 +5,7 @@ const express = require("express"),
   cookieSession = require("cookie-session"),
   passport = require("passport");
 
-require("dotenv").config();
+// require("dotenv").config();
 // have to require the model before requiring passport
 require("./models/User");
 require("./services/passport");

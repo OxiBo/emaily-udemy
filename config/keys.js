@@ -9,13 +9,15 @@ module.exports = {
   cookieKey: "anystring"
 };
 
-// cyPkbHuAAgyyvM36
+// cyPkbHuAAgyyvM36    --- 3ebsfFGDsjPDgQcK
 // mongodb+srv://OxiBo:<password>@cluster0-gm3ha.mongodb.net/test?retryWrites=true&w=majority
+
+// mongodb+srv://OxiBo:3ebsfFGDsjPDgQcK@cluster0-gm3ha.mongodb.net/test?retryWrites=true&w=majority
 
 if (process.NODE_ENV === "production") {
   // we are in development
   module.exports = require("./prod");
 } else {
   // we are in production
-  modules.exports = require("./dev");
+  module.exports = require("./dev");
 }
