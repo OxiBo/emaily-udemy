@@ -14,7 +14,7 @@
 
 // mongodb+srv://OxiBo:3ebsfFGDsjPDgQcK@cluster0-gm3ha.mongodb.net/test?retryWrites=true&w=majority
 
-if (process.NODE_ENV === "production") {
+if (process.env.NODE_ENV === "production") {
   // we are in production
   module.exports = require("./prod");
 } else {
