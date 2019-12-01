@@ -46,6 +46,10 @@ app.get("/test", (req, res) => {
   res.render('test')
 })
 
+const dev = process.env.NODE_ENV !== 'production'
+const app = next({ dev })
+
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log("App is working");

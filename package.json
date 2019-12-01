@@ -8,8 +8,11 @@
     "npm": "6.4.1"
   },
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "build": "next build",
+    "start": "NODE_ENV=production node index.js"
+
+   
   },
   "author": "OxiBo",
   "license": "ISC",
