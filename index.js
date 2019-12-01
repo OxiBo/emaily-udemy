@@ -1,3 +1,5 @@
+// run heroku console - https://stackoverflow.com/questions/19341975/heroku-node-cannot-find-module-error
+
 const express = require("express"),
   mongoose = require("mongoose"),
   // mongoAtlasPassword = process.env.MONGO_ATLAS_PASSWORD,
