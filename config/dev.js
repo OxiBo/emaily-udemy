@@ -3,5 +3,7 @@ module.exports = {
     googleClientID:'249710655207-mff59kibdpmdbi1dqsbk43adnr8e9spo.apps.googleusercontent.com',
     googleClientSecret:'-EFLHc74_OEBuOp4io8X6XZv',
     mongoURI: "mongodb+srv://OxiBo:jrcfyf1981@cluster0-xsu9k.mongodb.net/test?retryWrites=true&w=majority",
-    cookieKey: "anystring"
+    cookieKey: "anystring",
+    stripePublishableKey: 'pk_test_upCU3MtNHwG5x9o6WO1zkpGK00cJOUCZZE',
+    stripeSecretKey: "sk_test_jk2Qyu5mGnMER8LPRVfr4jp300kRKA8n83"
 };

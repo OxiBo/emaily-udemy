@@ -14,7 +14,6 @@ passport.deserializeUser((id, done) => {
   });
 });
 
-
 // https://console.developers.google.com/apis/dashboard?project=our-mechanism-252021&pli=1
 passport.use(
   new GoogleStrategy(
@@ -24,25 +23,19 @@ passport.use(
       callbackURL: "/auth/google/callback",
       proxy: true
     },
-    (accessToken, refreshToken, profile, done) => {
+    async (accessToken, refreshToken, profile, done) => {
       // console.log("access token: ", accessToken);
       //   console.log("refresh token: ", refreshToken);
       console.log("profile: ", profile);
-      User.findOne({ googleId: profile.id }).then(existingUser => {
-        if (existingUser) {
-          // we have the user in our database
-          done(null, existingUser);
-        } else {
-          // create a new user, we don't have the user in our database
-          new User({ googleId: profile.id })
-            .save()
-            .then(user => done(null, user));
-        }
-      });
+      const existingUser = await User.findOne({ googleId: profile.id });
 
-      //   new User({
-      //     googleId: profile.id
-      //   }).save();
+      if (existingUser) {
+        // we have the user in our database
+        return done(null, existingUser);
+      }
+      // create a new user, we don't have the user in our database
+      const user = await new User({ googleId: profile.id }).save();
+      done(null, user);
     }
   )
 );
