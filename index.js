@@ -1,4 +1,5 @@
 // run heroku console - https://stackoverflow.com/questions/19341975/heroku-node-cannot-find-module-error
+// http protocol - https://www.w3.org/Protocols/ and https://www.w3.org/Protocols/rfc2616/rfc2616-sec10 
 
 const express = require("express"),
   mongoose = require("mongoose"),
@@ -11,6 +12,7 @@ const express = require("express"),
 // require("dotenv").config();
 // have to require the model before requiring passport
 require("./models/User");
+require("./models/Survey");
 require("./services/passport");
 
 // console.log(keys.mongoURI)
@@ -43,11 +45,8 @@ app.use(passport.session()); // has to be before 'require("./routes/authRoutes")
 
 require("./routes/authRoutes")(app);
 require("./routes/billingRoutes")(app);
+require("./routes/surveyRoutes")(app);
 
-app.set("view engine", "ejs");
-app.get("/test", (req, res) => {
-  res.render("test");
-});
 
 if (process.env.NODE_ENV === "production") {
   // Express will serve production assets like main.css  or main.js files
