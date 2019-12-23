@@ -1,4 +1,7 @@
-const mongoose = require("mongoose"),
+const _ = require("lodash"),
+  Path = require("path-parser").default,
+  { URL } = require("url"),
+  mongoose = require("mongoose"),
   requireLogin = require("../middlewares/requireLogin"),
   requireCredits = require("../middlewares/requireCredits"),
   Survey = mongoose.model("surveys"),
@@ -6,8 +9,14 @@ const mongoose = require("mongoose"),
   surveyTemplate = require("../services/emailTemplates/surveyTemplate");
 
 module.exports = app => {
-  app.get("/api/surveys/thanks", (req, res) => {
-    res.send("Thanks for your feedback");
+  app.get("/api/surveys", requireLogin, async (req, res) => {
+    const surveys = await Survey.find({ _user: req.user.id })
+    .select({ recipients: false}); // will exclude recipients
+    res.send(surveys);
+  });
+
+  app.get("/api/surveys/:surveyId/:choice", (req, res) => {
+    res.send("Thanks for your feedback!!!");
   });
 
   app.post("/api/surveys", requireLogin, requireCredits, async (req, res) => {
@@ -32,7 +41,58 @@ module.exports = app => {
       const user = await req.user.save();
       res.send(user);
     } catch (error) {
-      res.status(422).send(err);
+      res.status(422).send(error);
     }
+  });
+
+  app.post("/api/surveys/webhooks", (req, res) => {
+    const p = new Path("/api/surveys/:surveyId/:choice");
+    // console.log(p);
+    _.chain(req.body)
+      .map(({ email, url }) => {
+        const match = p.test(new URL(url).pathname);
+        if (match) {
+          return { email, surveyId: match.surveyId, choice: match.choice };
+        }
+      })
+      .compact()
+      .uniqBy("email", "surveyId")
+      .each(({ surveyId, email, choice }) => {
+        Survey.updateOne(
+          {
+            _id: surveyId,
+            recipients: {
+              $elemMatch: { email: email, responded: false }
+            }
+          },
+          {
+            $inc: { [choice]: 1 },
+            $set: { "recipients.$.responded": true },
+            lastResponded: new Date()
+          }
+        ).exec();
+      })
+      .value();
+    // console.log(events);
+    res.send({});
+
+    /*
+    
+     const events = _.map(req.body, ({ email, url }) => {
+      const pathname = new URL(url).pathname;
+
+      const p = new Path("/api/surveys/:surveyId/:choice");
+      const match = p.test(pathname);
+
+      if (match) {
+        return { email, surveyId: match.surveyId, choice: match.choice };
+      }
+    });
+
+    // console.log(events);
+    const compactEvents = _.compact(events);
+    const uniqueEvents = _.uniqBy(compactEvents, "email", "surveyId");
+    
+    */
   });
 };
