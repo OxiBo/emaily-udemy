@@ -85,3 +85,27 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log("App is working");
 });
+
+
+
+/*
+to work with mongo in shell , go to terminal, type node to open shell and enter this:
+
+
+const express = require("express");
+const mongoose = require("mongoose");
+ const keys = require("./config/keys");
+  const cookieSession = require("cookie-session");
+  const passport = require("passport");
+  const bodyParser = require("body-parser");
+
+
+require("./models/User");
+require("./models/Survey");
+require("./services/passport");
+
+
+mongoose.connect(keys.mongoURI)
+
+
+*/

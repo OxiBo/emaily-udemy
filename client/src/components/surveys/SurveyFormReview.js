@@ -13,7 +13,7 @@ const SurveyFormReview = ({ onCancel, formValues, submitSurvey, history }) => {
     return (
       <div key={name}>
         <label htmlFor="">{label}</label>
-        <div>{formValues[name]}</div>
+        <div>{ !formValues[name] ? "no-replay@emaily.com" : formValues[name]}</div>
       </div>
     );
   });
@@ -39,6 +39,7 @@ const SurveyFormReview = ({ onCancel, formValues, submitSurvey, history }) => {
 };
 
 const mapStateToProps = state => {
+  console.log(state.form.surveyForm.values)
   return {
     formValues: state.form.surveyForm.values
   };

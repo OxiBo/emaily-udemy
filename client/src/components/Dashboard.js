@@ -5,12 +5,12 @@ import SurveyList from "./surveys/SurveyList";
 const Dashboard = () => {
   return (
     <div>
-      <SurveyList />
       <div className="fixed-action-bnt">
         <Link to="/surveys/new" className="btn-floating btn-large red">
           <i className="material-icons">add</i>
         </Link>
       </div>
+      <SurveyList />
     </div>
   );
 };

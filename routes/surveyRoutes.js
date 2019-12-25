@@ -10,8 +10,9 @@ const _ = require("lodash"),
 
 module.exports = app => {
   app.get("/api/surveys", requireLogin, async (req, res) => {
-    const surveys = await Survey.find({ _user: req.user.id })
-    .select({ recipients: false}); // will exclude recipients
+    const surveys = await Survey.find({ _user: req.user.id }).select({
+      recipients: false
+    }); // will exclude recipients
     res.send(surveys);
   });
 
@@ -20,17 +21,18 @@ module.exports = app => {
   });
 
   app.post("/api/surveys", requireLogin, requireCredits, async (req, res) => {
-    const { title, subject, body, recipients } = req.body;
+    const { title, subject, from_email, body, recipients } = req.body;
 
     const survey = new Survey({
       title,
       subject,
       body,
+      from_email,
       recipients: recipients.split(",").map(email => ({ email: email.trim() })), // https://www.udemy.com/course/node-with-react-fullstack-web-development/learn/lecture/7673304#content
       _user: req.user.id,
       dateSent: Date.now()
     });
-
+// console.log(survey)
     // send an email
     const mailer = new Mailer(survey, surveyTemplate(survey));
 
@@ -95,4 +97,15 @@ module.exports = app => {
     
     */
   });
+
+  app.delete(
+    "/api/surveys/delete/:surveyId",
+    requireLogin,
+    async (req, res) => {
+      const surveyToDelete = await Survey.findByIdAndRemove(
+        req.params.surveyId
+      );
+      res.send(surveyToDelete);
+    }
+  );
 };

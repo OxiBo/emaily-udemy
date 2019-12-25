@@ -6,6 +6,7 @@ import SurveyField from "./SurveyField";
 import _ from "lodash";
 
 import validateEmails from "../../utils/validateEmails";
+import validateSingleEmail from "../../utils/validateSingleEmail";
 import formFields from './formFields'
 
 class SurveyForm extends Component {
@@ -51,11 +52,16 @@ const validate = values => {
   // email validation should be before the other because if no emails provided the error message will be - provide emails (lower code part will override error.emails)
   errors.recipients = validateEmails(values.recipients || "");
 
+
+  errors.from_email = validateSingleEmail(values.from_email);
+
+
   _.each(formFields, ({ name }) => {
-    if (!values[name]) {
+    if (!values[name] && name !== "from_email") {
       errors[name] = `You must provide ${name}`;
     }
   });
+  console.log(errors)
 
   return errors;
 };
