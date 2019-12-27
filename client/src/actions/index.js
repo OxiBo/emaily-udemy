@@ -1,8 +1,9 @@
 import axios from "axios";
-import { FETCH_USER, FETCH_SURVEYS, DELETE_SURVEY } from "./types";
+import { FETCH_USER, FETCH_SURVEYS, DELETE_SURVEY, ERROR, SORT_BY } from "./types";
 
 export const fetchUser = () => async dispatch => {
   const res = await axios.get("/api/current_user");
+  // console.log(res.data)
   dispatch({ type: FETCH_USER, payload: res.data });
 };
 
@@ -15,14 +16,16 @@ export const handleToken = token => async dispatch => {
 export const submitSurvey = (values, history) => async dispatch => {
   try {
     const res = await axios.post("/api/surveys", values);
-    history.push("/surveys");
 
     dispatch({ type: FETCH_USER, payload: res.data });
+    dispatch({ type: ERROR, payload: { error: false } });
   } catch (err) {
-    history.push("/surveys");
-    console.error(err);
-    dispatch({ type: FETCH_USER, payload: err.error });
+    // need to work on this
+
+    // console.error(err.response.data);
+    dispatch({ type: ERROR, payload: err.response.data });
   }
+  history.push("/surveys");
 };
 
 export const fetchSurveys = () => async dispatch => {
@@ -34,3 +37,9 @@ export const deleteSurvey = surveyId => async dispatch => {
   await axios.delete(`api/surveys/delete/${surveyId}`);
   dispatch({ type: DELETE_SURVEY, payload: surveyId });
 };
+
+
+export const chooseSortBy = (filter) =>  ({
+    type: SORT_BY,
+    payload: filter
+  })

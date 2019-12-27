@@ -7,6 +7,9 @@ export default (state = [], action) => {
       return action.payload;
       case DELETE_SURVEY:
         return state.filter(survey => survey._id !== action.payload);
+        // case ERROR:
+        //   return action.payload;
+          
     default:
       return state;
   }

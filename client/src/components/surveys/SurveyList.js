@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { fetchSurveys, deleteSurvey } from "../../actions";
-
+import sortSurveys from "../../filters/sortSurveys";
 
 class SurveyList extends Component {
   componentDidMount() {
@@ -14,28 +14,29 @@ class SurveyList extends Component {
           <div className="card-content">
             <span className="card-title">{survey.title}</span>
             <p>{survey.body}</p>
-            {/* <div className="right"> */}
+
             <p className="right" style={{ display: "block" }}>
               Last Responded:
-              { survey.lastResponded ? new Date(survey.lastResponded).toLocaleDateString() : " Not responded yet"}
+              {survey.lastResponded
+                ? new Date(survey.lastResponded).toLocaleDateString()
+                : " Not responded yet"}
             </p>
             <br />
             <p className="right" style={{ display: "block" }}>
-              Send On: {new Date(survey.dateSent).toLocaleDateString()}
+              Sent On: {new Date(survey.dateSent).toLocaleDateString()}
             </p>
-            {/* </div> */}
           </div>
           <div className="card-action">
-            
             <a href="">Yes: {survey.yes}</a>
             <a href="">No: {survey.no}</a>
-            <button onClick={() => this.props.deleteSurvey(survey._id)} className="red btn-flat right white-text" type="submit">
+            <button
+              onClick={() => this.props.deleteSurvey(survey._id)}
+              className="red btn-flat right white-text"
+              type="submit"
+            >
               DELETE
               <i className="material-icons right">delete</i>
             </button>
-           
-         
-           
           </div>
         </div>
       );
@@ -47,9 +48,12 @@ class SurveyList extends Component {
   }
 }
 
-const mapStateToProps = ({ surveys }) => {
+const mapStateToProps = ({ surveys, sortBy }) => {
   return {
-    surveys
+    sortBy,
+    surveys: sortSurveys(surveys, sortBy.sortBy)
   };
 };
-export default connect(mapStateToProps, { fetchSurveys, deleteSurvey })(SurveyList);
+export default connect(mapStateToProps, { fetchSurveys, deleteSurvey })(
+  SurveyList
+);
