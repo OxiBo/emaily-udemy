@@ -1,5 +1,12 @@
 import axios from "axios";
-import { FETCH_USER, FETCH_SURVEYS, DELETE_SURVEY, ERROR, SORT_BY } from "./types";
+import {
+  FETCH_USER,
+  FETCH_SURVEYS,
+  DELETE_SURVEY,
+  ERROR,
+  SORT_BY,
+  FIND_BY_TITLE
+} from "./types";
 
 export const fetchUser = () => async dispatch => {
   const res = await axios.get("/api/current_user");
@@ -38,8 +45,12 @@ export const deleteSurvey = surveyId => async dispatch => {
   dispatch({ type: DELETE_SURVEY, payload: surveyId });
 };
 
+export const chooseSortBy = filter => ({
+  type: SORT_BY,
+  payload: filter
+});
 
-export const chooseSortBy = (filter) =>  ({
-    type: SORT_BY,
-    payload: filter
-  })
+export const findByTitle = title => ({
+  type: FIND_BY_TITLE,
+  payload: title
+});

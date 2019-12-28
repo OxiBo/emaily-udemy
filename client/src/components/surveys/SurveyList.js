@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { fetchSurveys, deleteSurvey } from "../../actions";
-import sortSurveys from "../../filters/sortSurveys";
+// import sortSurveys from "../../filters/sortSurveys";
+import manage from "../../filters/manage";
 
 class SurveyList extends Component {
   componentDidMount() {
@@ -48,10 +49,19 @@ class SurveyList extends Component {
   }
 }
 
-const mapStateToProps = ({ surveys, sortBy }) => {
+const mapStateToProps = ({
+  surveys,
+  sortBy: { filter, sortByCriteria, titleToFind }
+}) => {
   return {
-    sortBy,
-    surveys: sortSurveys(surveys, sortBy.sortBy)
+    filter,
+    sortByCriteria,
+    titleToFind,
+    surveys: manage(
+      surveys,
+      filter,
+      filter === "sort" ? sortByCriteria : titleToFind
+    )
   };
 };
 export default connect(mapStateToProps, { fetchSurveys, deleteSurvey })(
